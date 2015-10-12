@@ -3,7 +3,8 @@ export default function({
 	placeholder = null,
 	wrapper = null,
 	computeWidth = true,
-    stickyClass = null
+    stickyClass = null,
+	parent = null
 } = {}){
 	let top = null;
 	let isSticky = false;
@@ -74,7 +75,16 @@ export default function({
 
 	function update() {
 		const rect = wrapper.getBoundingClientRect();
-		const sticky = rect.top < top;
+		let parentBottom = 0;
+
+		if (parent) {
+			let parentRect = parent.getBoundingClientRect();
+			parentBottom = parentRect.bottom - rect.height;
+		} else {
+			parentBottom = document.body.clientHeight;
+		}
+
+		const sticky = rect.top < top && parentBottom > top;
 
 		if (sticky) {
 			placeholder.style.height = rect.height + 'px';

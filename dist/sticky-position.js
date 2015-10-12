@@ -31,6 +31,8 @@
 		var computeWidth = _ref$computeWidth === undefined ? true : _ref$computeWidth;
 		var _ref$stickyClass = _ref.stickyClass;
 		var stickyClass = _ref$stickyClass === undefined ? null : _ref$stickyClass;
+		var _ref$parent = _ref.parent;
+		var parent = _ref$parent === undefined ? null : _ref$parent;
 
 		var top = null;
 		var isSticky = false;
@@ -103,7 +105,16 @@
 
 		function update() {
 			var rect = wrapper.getBoundingClientRect();
-			var sticky = rect.top < top;
+			var parentBottom = 0;
+
+			if (parent) {
+				var _parentRect = parent.getBoundingClientRect();
+				parentBottom = _parentRect.bottom - rect.height;
+			} else {
+				parentBottom = document.body.clientHeight;
+			}
+
+			var sticky = rect.top < top && parentBottom > top;
 
 			if (sticky) {
 				placeholder.style.height = rect.height + 'px';
